@@ -1,0 +1,48 @@
+server:
+  port: 8080
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: kafka-streams-consumer
+
+  kafka:
+    consumer:
+      properties:
+        spring.json.trusted.packages: "com.zen.poc.model"
+          ## You can specify a class package, or use * for any packages
+  cloud:
+    stream:
+      kafka:
+        binder:
+          headers:
+            - spring_json_header_types
+        bindings:
+          consumer-in-0:
+            consumer:
+              configuration:
+                max.poll.records: 500
+      bindings:
+        consumer-in-0:
+          group: best-money
+          destination: main-topic
+          consumer:
+            batch-mode: true
+            concurrency: 70
+            contentType: application/json
+            configuration:
+              max:
+                poll:
+                  records: 45
+        streams:
+          binder:
+            deserializationExceptionHandler: sendToDlq
+            configuration:
+              commit.interval.ms: 1000
+              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              default.value.serde: org.springframework.kafka.support.serializer.JsonSerde
+
+
+
+

@@ -1,0 +1,25 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: kafka-streams-producer
+
+  cloud:
+    stream:
+      poller:
+        fixedDelay: 30
+      bindings:
+        moneySupplier-out-0:
+          destination: main-topic
+        streams:
+          binder:
+            deserializationExceptionHandler: sendToDlq
+            configuration:
+              commit.interval.ms: 100
+              default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+              default.value.serde: org.springframework.kafka.support.serializer.JsonSerde
+
+
+
+
