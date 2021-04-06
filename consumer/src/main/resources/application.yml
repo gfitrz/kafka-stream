@@ -12,29 +12,26 @@ spring:
       properties:
         spring.json.trusted.packages: "com.zen.poc.model"
           ## You can specify a class package, or use * for any packages
+
   cloud:
     stream:
       kafka:
-        binder:
-          headers:
-            - spring_json_header_types
         bindings:
           consumer-in-0:
             consumer:
+              deserializationExceptionHandler: logAndContinue
+              ##autoCommitOffset: false
+              ##ack-mode: MANUAL
               configuration:
                 max.poll.records: 500
       bindings:
         consumer-in-0:
           group: best-money
-          destination: main-topic
+          destination: kafka-stream-topic
           consumer:
             batch-mode: true
             concurrency: 70
             contentType: application/json
-            configuration:
-              max:
-                poll:
-                  records: 45
         streams:
           binder:
             deserializationExceptionHandler: sendToDlq

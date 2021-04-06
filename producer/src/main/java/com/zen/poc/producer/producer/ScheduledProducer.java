@@ -23,6 +23,7 @@ public class ScheduledProducer {
     private static final int SIZE = CURRENCIES.size();
     private static final Random RANDOM = new Random();
 
+    // single message // streamBridge
     @Bean
     public Supplier<Message<Money>> moneySupplier() {
         return () -> {
